@@ -1,23 +1,14 @@
 // ScheduleCard.js
 import React from "react";
-import {
-  Card,
-  CardTitle,
-  CardText,
-  CardActions,
-  Button,
-  Icon,
-} from "@chatui/core";
+import { Card, CardTitle, CardText, CardActions, Button, Icon } from "@chatui/core";
 
-const userColors = ["#e6f4ff", "#fce4ec"];
-
-export default function ScheduleCard({ data }) {
+export default function ScheduleCard({ data = {} }) {
   const {
-    topic = "员工作业助手产品交流",
-    dateStr = "07月16日 周三",
-    timeStr = "09:30-10:30",
-    participants = ["李四", "张三"],
-    location = "江滨大厦",
+    topic ,
+    dateStr ,
+    timeStr ,
+    participants ,
+    location ,
   } = data;
 
   return (
@@ -26,87 +17,86 @@ export default function ScheduleCard({ data }) {
 
       <CardText>
         {/* 主题 */}
-        <Section iconType="calendar" label="主题">
-          <ContentBox>{topic}</ContentBox>
-        </Section>
+        <div style={rowStyle}>
+          <Icon type="bullhorn" style={iconStyle} />
+          <span style={labelStyle}>主题</span>
+        </div>
+        <div style={boxStyle}>
+          <input defaultValue={topic} style={inputStyle} />
+        </div>
 
         {/* 时间 */}
-        <Section iconType="clock" label="时间">
-          <ContentBox>
-            {dateStr} {timeStr}
-            <Icon type="calendar" style={{ float: "right", color: "#999" }} />
-          </ContentBox>
-        </Section>
+        <div style={rowStyle}>
+          <Icon type="clock" style={iconStyle} />
+          <span style={labelStyle}>时间</span>
+        </div>
+        <div style={boxStyle}>
+          <input defaultValue={`${dateStr} ${timeStr}`} style={inputStyle} />
+          <Icon type="calendar" style={iconRightStyle} />
+        </div>
 
         {/* 参与人员 */}
-        <Section iconType="user" label="参与人员">
-          <ContentBox>
-            {participants.map((name, idx) => (
-              <span
-                key={name}
-                style={{
-                  backgroundColor: userColors[idx % userColors.length],
-                  padding: "4px 8px",
-                  borderRadius: 6,
-                  marginRight: 8,
-                }}
-              >
-                {name}
-              </span>
-            ))}
-            <Icon type="plus" style={{ float: "right", color: "#999" }} />
-          </ContentBox>
-        </Section>
+        <div style={rowStyle}>
+          <Icon type="user" style={iconStyle} />
+          <span style={labelStyle}>参与人员</span>
+        </div>
+        <div style={boxStyle}>
+          <input defaultValue={participants.join("、")} style={inputStyle} />
+        </div>
 
         {/* 地点 */}
-        <div style={{ display: "flex", alignItems: "center", marginTop: 16 }}>
-          <Icon type="location" style={{ marginRight: 8 }} />
-          <span style={{ fontWeight: 500 }}>{location}</span>
+        <div style={rowStyle}>
+          <Icon type="environment" style={iconStyle} />
+          <span style={labelStyle}>地点</span>
+        </div>
+        <div style={boxStyle}>
+          <input defaultValue={location} style={inputStyle} />
         </div>
       </CardText>
 
-      {/* 操作按钮 */}
       <CardActions direction="row">
-        <Button type="ghost">取消</Button>
-        <Button type="primary">创建日程</Button>
+        <Button >取消</Button>
+        <Button color="primary">创建日程</Button>
       </CardActions>
 
-      {/* 底部说明 */}
-      <div
-        style={{
-          fontSize: 12,
-          color: "#888",
-          marginTop: 8,
-          textAlign: "center",
-        }}
-      >
+      <div style={{ fontSize: 12, color: "#888", marginTop: 8, textAlign: "center" }}>
         内容由AI生成
       </div>
     </Card>
   );
 }
 
-// 内容容器样式组件
-const ContentBox = ({ children }) => (
-  <div
-    style={{
-      background: "#f5f5f5",
-      padding: 10,
-      borderRadius: 8,
-      marginTop: 4,
-    }}
-  >
-    {children}
-  </div>
-);
+const rowStyle = {
+  display: "flex",
+  alignItems: "center",
+  marginTop: 16,
+};
 
-// 公共结构段落组件
-const Section = ({ iconType, label, children }) => (
-  <div style={{ marginTop: 16 }}>
-    <div style={{ display: "flex", alignItems: "center" }}>
-      <Icon type={iconType} style={{ marginRight: 8 }} />
-      <span style={{ fontWeight: 500 }}>{label}</span>
-    </div>
-    {children}
-  </div>
-);
+const iconStyle = {
+  marginRight: 8,
+};
+
+const iconRightStyle = {
+  float: "right",
+  color: "#999",
+};
+
+const labelStyle = {
+  fontWeight: 500,
+};
+
+const boxStyle = {
+  background: "#f5f5f5",
+  padding: 10,
+  borderRadius: 8,
+  marginTop: 4,
+  position: "relative",
+};
+
+const inputStyle = {
+  width: "100%",
+  border: "none",
+  background: "transparent",
+  outline: "none",
+  fontSize: 14,
+};
