@@ -4,11 +4,11 @@ import { Card, CardTitle, CardText, CardActions, Button, Icon } from "@chatui/co
 
 export default function ScheduleCard({ data = {} }) {
   const {
-    topic ,
-    dateStr ,
-    timeStr ,
-    participants ,
-    location ,
+    topic,
+    dateStr,
+    timeStr,
+    participants,
+    location,
   } = data;
 
   return (
