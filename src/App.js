@@ -1,14 +1,16 @@
 // app.js
-import React from "react";
+import React, { useRef } from "react";
 import Chat, { Bubble, useMessages } from "@chatui/core";
 import "@chatui/core/dist/index.css";
 import ScheduleCard from "./cards/ScheduleCard";
 import LinkCard from "./cards/LinkCard";
 
-import { fetchFromFastGpt } from "./agents/fastgptAgent";
+import { generateChatId, fetchFromFastGpt } from "./agents/fastgptAgent";
 
 export default function App() {
   const { messages, appendMsg } = useMessages([]);
+  // 只生成一次 chatId
+  const chatIdRef = useRef(generateChatId());
 
   const renderMap = {
     text: (content) => <Bubble content={content.text} />,
@@ -24,10 +26,11 @@ export default function App() {
         position: "right",
       });
 
-      const { type: type, content } = await fetchFromFastGpt(val);
+      // 使用同一个 chatId
+      const { type: msgType, content } = await fetchFromFastGpt(val, chatIdRef.current);
 
       appendMsg({
-        type: type,
+        type: msgType,
         content,
       });
     }
@@ -38,7 +41,7 @@ export default function App() {
     if (renderMap[type]) {
       return renderMap[type](content);
     }
-    return <Bubble content={`[不支持的消息类型: ${cardType}]`} />;
+    return <Bubble content={`[不支持的消息类型: ${type}]`} />;
   }
 
   return (

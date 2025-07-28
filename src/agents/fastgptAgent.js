@@ -1,9 +1,15 @@
 const GPT_API_URL = "https://cloud.fastgpt.cn/api/v1/chat/completions";
 const GPT_API_KEY = "fastgpt-i9XM0NzBsO3lWULpq8QckHC8wDFkZwEVA6vNifePub9tlMFUgmZPCecbVr0C1Ty"; 
 
-export async function fetchFromFastGpt(inputText) {
+// 新增：生成 chatId 的函数
+export function generateChatId() {
+  return `chat_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+}
+
+// chatId 作为参数传入
+export async function fetchFromFastGpt(inputText, chatId) {
   const requestBody = {
-    chatId: "my_chatId",
+    chatId, // 使用传入的 chatId
     stream: false,
     detail: false,
     responseChatItemId: "my_responseChatItemId",
@@ -35,8 +41,6 @@ export async function fetchFromFastGpt(inputText) {
     }
 
     const parsed = safeJsonParse(content);
-
-    
 
     if (!parsed || !parsed.type || !parsed.content) {
       throw new Error("返回内容格式不合法");
